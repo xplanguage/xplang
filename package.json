@@ -1,0 +1,47 @@
+{
+  "name": "xplang",
+  "version": "1.0.0",
+  "description": "The Exceptional Programming Language",
+  "type": "module",
+  "main": "cli.js",
+  "scripts": {
+    "cli": "node cli.js",
+    "web": "nodemon web.js",
+    "lint": "npx eslint .",
+    "getAntlr": "wget --show-progress -O syntax/antlr.jar https://www.antlr.org/download/antlr-4.13.0-complete.jar",
+    "bind": "cd syntax && java -jar ./antlr.jar -Dlanguage=JavaScript -o bindings xplLexer.g4 xplParser.g4",
+    "tree": "antlr4-parse ./syntax/xplLexer.g4 ./syntax/xplParser.g4 parse ./test/test.xpl -tree",
+    "gui": "antlr4-parse ./syntax/xplLexer.g4 ./syntax/xplParser.g4 parse ./test/test.xpl -gui"
+  },
+  "imports": {
+    "#XPL": "./src/xpl.js",
+    "#Walker": "./src/walker.js",
+    "#Lexer": "./syntax/bindings/xplLexer.js",
+    "#Parser": "./syntax/bindings/xplParser.js",
+    "#Listener": "./syntax/bindings/xplParserListener.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xplanguage/xplang.git"
+  },
+  "author": "frithsun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xplanguage/xplang/issues"
+  },
+  "homepage": "https://github.com/xplanguage/xplang#readme",
+  "dependencies": {
+    "antlr4": "4.13.0",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.48.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "nodemon": "^3.0.1"
+  }
+}
