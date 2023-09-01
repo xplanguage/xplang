@@ -8,7 +8,7 @@ parse: (freeFormulaic | patchDef)* EOF;
 
 freeFormulaic: formulaicPiped;
 
-formulaic: (parentCall? formulaCall) | (parentCall? field) | table | string | number | context | placeholder;
+formulaic: (parentCall? formulaCall) | (parentCall? field) | table | string | number | context | placeholder | null;
 formulaCall: exceptional | (formulaLabel formulaCallItem* ParenClose);
 formulaLabel: (field ParenOpen | FormulaChar+);
 formulaCallItem: (label Assign)? formulaic;
@@ -20,10 +20,10 @@ exceptional: exceptionalLabel Assign Assign exceptionalCatch? formulaCallItem?;
 exceptionalCatch: BraceOpen formulaic BraceClose;
 exceptionalLabel: Label;
 
-type: typeFormulaic | null | typeString | typeBool | typeTable |
+type: typeFormulaic | null | typeString | typeBoolean | typeTable |
     ((TypeCustom typeLabel) (ParenOpen formulaCallItem+ ParenClose)?);
 typeTable: TypeTable;
-typeBool: TypeBool;
+typeBoolean: TypeBoolean;
 typeString: TypeString;
 typeFormulaic: TypeFormulaic;
 typeLabel: Label;
@@ -36,7 +36,8 @@ piped: Pipe alias? formulaicPiped;
 alias: Label Assign;
 
 batch: batchItem+;
-batchItem: type? protect? priv? batchLabel mutable? nullable? unique? (Assign (formulaic | formulaDef | table | null))?;
+batchItem: type? protect? priv? batchLabel mutable? nullable? unique? (Assign batchDefault)?;
+batchDefault: formulaic | formulaDef | null;
 protect: Bang;
 priv: Bang;
 mutable: Bang;

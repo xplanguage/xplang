@@ -36,7 +36,7 @@ TypeFormulaic: '@@@';
 Null: '@@';
 TypeCustom: '@';
 TypeTable: '#';
-TypeBool: '&';
+TypeBoolean: '&';
 TypeString: '$';
 
 HexInteger: '-'? '0' [xX] HexDigit (HexDigit | '_')*;
