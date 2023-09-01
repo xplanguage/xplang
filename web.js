@@ -7,6 +7,7 @@ app.set('view engine', 'ejs');
 app.use('/xpl/antlr4', express.static('./node_modules/antlr4/dist'));
 app.use('/xpl/bindings', express.static('./syntax/bindings'));
 app.use('/xpl/src', express.static('./src'));
+app.use('/xpl/test', express.static('./test'));
 
 app.get('/', (req, res) => {
   res.render('index', { version: Date.now() });

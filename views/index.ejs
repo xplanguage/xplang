@@ -25,7 +25,10 @@
 
 			document.xpl = new XPL();
 
-			document.xpl.eval(`<%- include('../test/test.xpl') %>`);
+			fetch("./xpl/test/test.xpl", {encoding: 'UTF-8' } )
+				.then((file) => file.text())
+				.then((code) => document.xpl.eval(code));
+
 		</script>
 	</head>
 	<body>
