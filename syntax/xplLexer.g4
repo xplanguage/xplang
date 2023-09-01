@@ -17,9 +17,8 @@ TableClose: ']';
 
 FormulaChar: [-~!@#$%^&_+*=<>?/]+ ParenOpen;
 
+Context: '%%';
 Placeholder: '%';
-
-Null: '@@';
 
 Star: '*';
 
@@ -33,10 +32,12 @@ Dot: '.';
 
 ParentCall: '\\';
 
+TypeFormulaic: '@@@';
+Null: '@@';
+TypeCustom: '@';
 TypeTable: '#';
 TypeBool: '&';
 TypeString: '$';
-TypeCustom: '@';
 
 HexInteger: '-'? '0' [xX] HexDigit (HexDigit | '_')*;
 

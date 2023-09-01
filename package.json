@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/xplanguage/xplang#readme",
   "dependencies": {
+    "@sqlite.org/sqlite-wasm": "^3.43.0-build3",
     "antlr4": "4.13.0",
     "ejs": "^3.1.9",
     "express": "^4.18.2"

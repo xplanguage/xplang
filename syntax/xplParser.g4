@@ -4,20 +4,26 @@ options {
     tokenVocab = xplLexer;
 }
 
-parse: (formulaic | patchDef)* EOF;
+parse: (formulaicPiped | patchDef)* EOF;
 
-formulaic: (parentCall? formulaCall) | (parentCall? field) | table | string | number;
-formulaCall: formulaLabel formulaCallItem* ParenClose;
+formulaic: (parentCall? formulaCall) | (parentCall? field) | table | string | number | context | placeholder;
+formulaCall: exceptional | (formulaLabel formulaCallItem* ParenClose);
 formulaLabel: (field ParenOpen | FormulaChar+);
 formulaCallItem: (label Assign)? formulaic;
 parentCall: ParentCall;
+context: Context;
+placeholder: Placeholder;
 
-type: typeTable | typeBool | typeString | typeCustom;
-typeNative: typeTable | typeBool | typeString;
+exceptional: exceptionalLabel Assign Assign exceptionalCatch? formulaCallItem?;
+exceptionalCatch: BraceOpen formulaic BraceClose;
+exceptionalLabel: Label;
+
+type: typeFormulaic | null | typeString | typeBool | typeTable |
+    ((TypeCustom typeLabel) (ParenOpen formulaCallItem+ ParenClose)?);
 typeTable: TypeTable;
 typeBool: TypeBool;
 typeString: TypeString;
-typeCustom: TypeCustom typeLabel;
+typeFormulaic: TypeFormulaic;
 typeLabel: Label;
 
 table: (ParenOpen batch ParenClose)? (TableOpen formulaic* TableClose)+;
@@ -43,7 +49,8 @@ label: Label;
 module: Label;
 field: (module Dot)? label;
 
-patchDef: (((label | field | number | string | formulaCall | pattern | null ) Assign) | path) Assign (patchBatch patchHatch | patchBatch | patchHatch);
+patchParent: BraceOpen formulaic BraceClose;
+patchDef: (((label | field | number | string | formulaCall | pattern | null ) Assign) | path) Assign patchParent? (patchBatch patchHatch | patchBatch | patchHatch);
 patchBatch: (ParenOpen batch ParenClose);
 patchHatch: (CurlyOpen hatch CurlyClose);
 
