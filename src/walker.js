@@ -7,7 +7,7 @@ export default class Walker extends Listener {
     if (typeof process !== 'object') document.xplDebug = [];
   }
 
-  exitFormulaic(ctx) {
+  exitFreeFormulaic(ctx) {
     console.table(ctx.getText());
     if (typeof process !== 'object') document.xplDebug.push(ctx);
   }

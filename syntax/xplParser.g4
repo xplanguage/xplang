@@ -4,7 +4,9 @@ options {
     tokenVocab = xplLexer;
 }
 
-parse: (formulaicPiped | patchDef)* EOF;
+parse: (freeFormulaic | patchDef)* EOF;
+
+freeFormulaic: formulaicPiped;
 
 formulaic: (parentCall? formulaCall) | (parentCall? field) | table | string | number | context | placeholder;
 formulaCall: exceptional | (formulaLabel formulaCallItem* ParenClose);

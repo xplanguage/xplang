@@ -30,7 +30,7 @@ Pipe: '|';
 
 Dot: '.';
 
-ParentCall: '\\';
+ParentCall: '\\\\';
 
 TypeFormulaic: '@@@';
 Null: '@@';
