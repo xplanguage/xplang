@@ -1,5 +1,9 @@
+import SQL from  "#SQL";
+
 export default class DB {
-  constructor() {}
+  constructor() {
+    this.sql = new SQL();
+  }
 
   addTable(batch, data) {
     console.log(batch, data);
