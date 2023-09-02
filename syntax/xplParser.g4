@@ -33,7 +33,7 @@ formulaicPiped: alias? formulaic piped?;
 piped: Pipe alias? formulaicPiped;
 alias: Label Assign;
 
-batch:ParenOpen  batchItem* ParenClose;
+batch: ParenOpen  batchItem* ParenClose;
 batchItem: type? protect? priv? batchLabel mutable? nullable? unique? (Assign batchDefault)?;
 batchDefault: formulaic | formulaDef | null;
 protect: Bang;

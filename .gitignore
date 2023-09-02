@@ -133,4 +133,4 @@ dist
 package-lock.json
 syntax/antlr.jar
 syntax/bindings/
-test/
+test/test.xpl

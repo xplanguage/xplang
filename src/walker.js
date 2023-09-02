@@ -4,8 +4,7 @@ export default class Walker extends Listener {
   constructor(xpl) {
     super();
     this.xpl = xpl;
-    this.table = new Table(xpl.db);
-    this.formulaic = new Formulaic();
+    this.table = new Table(xpl.db, new Formulaic());
 
     if (typeof process !== 'object') document.xplDebug = [];
   }
@@ -21,8 +20,9 @@ export default class Walker extends Listener {
 }
 
 class Table {
-  constructor(db) {
+  constructor(db, formulaic) {
     this.db = db;
+    this.formulaic = formulaic;
   }
 
   addTable(tbl) {
@@ -39,12 +39,13 @@ class Table {
   getBatch(batch) {
     const batchItems = [];
     batch.forEach((batchItem) => {
+
+      if (!batchItem?.batchLabel) return;
+
       const item = {};
 
       item.private = batchItem.private ? true : false;
       item.protect = batchItem.protect ? true : false;
-
-      const bitem = batchItem.type();
 
       if (!batchItem.type()) { item.type = "_number" }
       else if (batchItem.type().typeString()) { item.type = "_string" }
