@@ -4,7 +4,14 @@ import Lexer from '#Lexer';
 import Parser from '#Parser';
 import Walker from '#Walker';
 
+import DB from "#DB";
+
 export default class XPL {
+  constructor() {
+    this.db = new DB();
+    this.tables = [];
+  }
+
   getTree(code) {
     const chars = new antlr4.InputStream(code.toString());
     const lexer = new Lexer(chars);
@@ -18,7 +25,7 @@ export default class XPL {
 
   eval(code) {
     antlr4.tree.ParseTreeWalker.DEFAULT.walk(
-      new Walker(),
+      new Walker(this),
       this.getTree(code),
     );
   }

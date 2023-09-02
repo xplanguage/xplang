@@ -15,6 +15,7 @@
   },
   "imports": {
     "#XPL": "./src/xpl.js",
+    "#DB": "./src/db.js",
     "#Walker": "./src/walker.js",
     "#Lexer": "./syntax/bindings/xplLexer.js",
     "#Parser": "./syntax/bindings/xplParser.js",

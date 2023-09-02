@@ -1,39 +1,45 @@
 import Listener from '#Listener';
 
 export default class Walker extends Listener {
-  constructor() {
+  constructor(xpl) {
     super();
+    this.xpl = xpl;
+    this.table = new Table(xpl.db);
+    this.formulaic = new Formulaic();
 
     if (typeof process !== 'object') document.xplDebug = [];
   }
 
-  _exitFreeFormulaic(ctx) {
-    if (typeof process !== 'object') document.xplDebug.push(ctx);
-  }
+  // TODO: exitFreeFormulaic entry point
+
+  // TODO: patchDef entry point
 
   exitTable(ctx) {
     if (typeof process !== 'object') document.xplDebug.push(ctx);
-    XplTable.addTable(ctx);
+    this.table.addTable(ctx);
   }
 }
 
-class XplTable {
-
-  static addTable(table) {
-    let batch = [];
-
-    if (table['batch']) batch = XplTable.getBatch(table.batch().children);
-
-    console.log(batch);
+class Table {
+  constructor(db) {
+    this.db = db;
   }
 
-  static getBatch(batch) {
+  addTable(tbl) {
+    let batch = [];
+    let data = [];
+
+    if (tbl.batch()) batch = this.getBatch(tbl.batch().children);
+
+    if (tbl.tableData()) data = this.getData(tbl.tableData().children);
+
+    this.db.addTable(batch, data);
+  }
+
+  getBatch(batch) {
     const batchItems = [];
     batch.forEach((batchItem) => {
       const item = {};
-
-      // TODO: replace "numbers" with WASM primitives
-      if (!batchItem.type()) { item.primitive = true }
 
       item.private = batchItem.private ? true : false;
       item.protect = batchItem.protect ? true : false;
@@ -57,8 +63,30 @@ class XplTable {
 
       item.unique = batchItem.unique ? true : false;
 
-      if (batchItem.batchDefault) {
-        item.default = batchItem.batchDefault().getText();
+      if (item.type === "_null") {
+        item.primitive = true;
+        item.default = null;
+        batchItems.push(item);
+        return;
+      }
+
+      // primitives store value, other stores pointer
+
+      if (item.type === "_number" || item.type === '_boolean') {
+        // TODO: The primitives should be wasm primitives
+        item.primitive = true;
+        // allowing null is okay even if not nullable, since values
+        // can be added as arguments or config --set insertions
+        item.default = batchItem.batchDefault()?.getText() || null;
+        batchItems.push(item);
+        return;
+      }
+
+      item.primitive = false;
+
+      if(batchItem.batchDefault()) {
+        const value = this.formulaic.createValue(batchItem.batchDefault());
+        item.default = this.formulaic.getIndex(value);
       } else {
         item.default = null;
       }
@@ -68,4 +96,44 @@ class XplTable {
 
     return batchItems;
   }
+
+  getData(data) {
+    const rows = [];
+    data.forEach((dataRow) => {
+      const row = [];
+
+      dataRow.tableField().forEach((dataItem) => {
+        const item = {
+          primitive: undefined,
+          value: undefined
+        };
+
+        if (dataItem.formulaic().null_()) {
+          item.primitive = true;
+          item.value = null;
+        } else if (dataItem.formulaic().number()) {
+          item.primitive = true;
+          item.value = dataItem.formulaic().getText();
+        } else {
+          item.primitive = false;
+
+          const value = this.formulaic.createValue(dataItem);
+          item.value = this.formulaic.getIndex(value);
+        }
+
+        row.push(item);
+      });
+
+      rows.push(row);
+    });
+    return rows;
+  }
+}
+
+class Formulaic {
+  // TODO: implement creating custom type fields
+  createValue(value) { return -1 }
+
+  // TODO: implement returning index of custom field table
+  getIndex(value) { return -2 }
 }

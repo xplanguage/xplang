@@ -28,14 +28,12 @@ typeString: TypeString;
 typeFormulaic: TypeFormulaic;
 typeLabel: Label;
 
-table: (ParenOpen batch ParenClose)? (TableOpen formulaic* TableClose)+;
-
-formulaDef: (ParenOpen batch ParenClose)? CurlyOpen formulaicPiped CurlyClose;
+formulaDef: batch? CurlyOpen formulaicPiped CurlyClose;
 formulaicPiped: alias? formulaic piped?;
 piped: Pipe alias? formulaicPiped;
 alias: Label Assign;
 
-batch: batchItem+;
+batch:ParenOpen  batchItem* ParenClose;
 batchItem: type? protect? priv? batchLabel mutable? nullable? unique? (Assign batchDefault)?;
 batchDefault: formulaic | formulaDef | null;
 protect: Bang;
@@ -46,16 +44,20 @@ unique: Star;
 batchLabel: Label;
 null: Null;
 
-hatch: formulaicPiped;
+hatch: CurlyOpen formulaicPiped* CurlyClose;
+
+patchParent: BraceOpen formulaic BraceClose;
+patchDef: (((label | field | number | string | formulaCall | pattern | null ) Assign) | path) Assign patchParent? (batch hatch | batch | hatch);
+patchBatch: batch;
+
+table: (batch tableData) | batch | tableData;
+tableData: tableRow+;
+tableRow: TableOpen tableField* TableClose;
+tableField: formulaic;
 
 label: Label;
 module: Label;
 field: (module Dot)? label;
-
-patchParent: BraceOpen formulaic BraceClose;
-patchDef: (((label | field | number | string | formulaCall | pattern | null ) Assign) | path) Assign patchParent? (patchBatch patchHatch | patchBatch | patchHatch);
-patchBatch: (ParenOpen batch ParenClose);
-patchHatch: (CurlyOpen hatch CurlyClose);
 
 number: decimalInteger | decimal | hexInteger | octalInteger;
 decimalInteger: DecimalInteger;
