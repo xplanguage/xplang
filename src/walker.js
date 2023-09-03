@@ -126,7 +126,6 @@ class Formulaic {
   getIndex(value) { return -2; }
 }
 
-
 export default class Walker extends Listener {
   constructor(xpl) {
     super();

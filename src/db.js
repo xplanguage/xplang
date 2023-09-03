@@ -26,7 +26,7 @@ export default class DB {
           reject(Error('failed to load sqlite'));
         }
         if (this.sqlite) resolve(this.sqlite);
-        attempts += 1;;
+        attempts += 1;
       }, 500);
     });
   }
