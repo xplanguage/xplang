@@ -11,7 +11,7 @@ app.use('/xpl/src', express.static('./src'));
 app.use('/xpl/test', express.static('./test'));
 
 let testFile = process.env.XPL_TESTFILE || 'test/testSyntax.xpl';
-testFile = './xpl/' + testFile;
+testFile = `./xpl/${testFile}`;
 
 app.get('/', (req, res) => {
   res.render('index', { version: Date.now(), testFile });

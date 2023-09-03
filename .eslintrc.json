@@ -12,6 +12,8 @@
         "import/no-unresolved": "off",
         "import/extensions": "off",
         "no-console": ["error", { "allow": ["table", "warn", "error", "debug"] }],
-        "class-methods-use-this": "off"
+        "class-methods-use-this": "off",
+        "no-underscore-dangle": "off",
+        "max-classes-per-file": "off"
     }
 }

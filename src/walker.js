@@ -1,24 +1,5 @@
 import Listener from '#Listener';
 
-export default class Walker extends Listener {
-  constructor(xpl) {
-    super();
-    this.xpl = xpl;
-    this.table = new Table(xpl.db, new Formulaic());
-
-    if (typeof process !== 'object') document.xplDebug = [];
-  }
-
-  // TODO: exitFreeFormulaic entry point
-
-  // TODO: patchDef entry point
-
-  exitTable(ctx) {
-    if (typeof process !== 'object') document.xplDebug.push(ctx);
-    this.table.addTable(ctx);
-  }
-}
-
 class Table {
   constructor(db, formulaic) {
     this.db = db;
@@ -38,33 +19,39 @@ class Table {
 
   getBatch(batch) {
     const batchItems = [];
-    batch.forEach((batchItem) => {
 
+    batch.forEach((batchItem) => {
       if (!batchItem?.batchLabel) return;
 
       const item = {};
 
-      item.private = batchItem.private ? true : false;
-      item.protect = batchItem.protect ? true : false;
+      item.private = batchItem.private !== false;
+      item.protect = batchItem.protect !== false;
 
-      if (!batchItem.type()) { item.type = "_number" }
-      else if (batchItem.type().typeString()) { item.type = "_string" }
-      else if (batchItem.type().typeBoolean()) { item.type = "_boolean" }
-      else if (batchItem.type().typeTable()) { item.type = "_table" }
-      else if (batchItem.type().typeFormulaic()) { item.type = "_formulaic" }
-      else if (batchItem.type().null_()) { item.type = "_null" }
-      else {
+      if (!batchItem.type()) {
+        item.type = '_number';
+      } else if (batchItem.type().typeString()) {
+        item.type = '_string';
+      } else if (batchItem.type().typeBoolean()) {
+        item.type = '_boolean';
+      } else if (batchItem.type().typeTable()) {
+        item.type = '_table';
+      } else if (batchItem.type().typeFormulaic()) {
+        item.type = '_formulaic';
+      } else if (batchItem.type().null_()) {
+        item.type = '_null';
+      } else {
         item.type = batchItem.type().typeLabel().getText();
       }
 
       item.label = batchItem.batchLabel().getText();
 
-      item.mutable = batchItem.mutable ? true : false;
-      item.nullable = batchItem.nullable ? true : false;
+      item.mutable = batchItem.mutable !== false;
+      item.nullable = batchItem.nullable !== false;
 
-      item.unique = batchItem.unique ? true : false;
+      item.unique = batchItem.unique !== false;
 
-      if (item.type === "_null") {
+      if (item.type === '_null') {
         item.primitive = true;
         item.default = null;
         batchItems.push(item);
@@ -73,7 +60,7 @@ class Table {
 
       // primitives store value, other stores pointer
 
-      if (item.type === "_number" || item.type === '_boolean') {
+      if (item.type === '_number' || item.type === '_boolean') {
         // TODO: The primitives should be wasm primitives
         item.primitive = true;
         // allowing null is okay even if not nullable, since values
@@ -85,7 +72,7 @@ class Table {
 
       item.primitive = false;
 
-      if(batchItem.batchDefault()) {
+      if (batchItem.batchDefault()) {
         const value = this.formulaic.createValue(batchItem.batchDefault());
         item.default = this.formulaic.getIndex(value);
       } else {
@@ -106,7 +93,7 @@ class Table {
       dataRow.tableField().forEach((dataItem) => {
         const item = {
           primitive: undefined,
-          value: undefined
+          value: undefined,
         };
 
         if (dataItem.formulaic().null_()) {
@@ -133,8 +120,28 @@ class Table {
 
 class Formulaic {
   // TODO: implement creating custom type fields
-  createValue(value) { return -1 }
+  createValue(value) { return -1; }
 
   // TODO: implement returning index of custom field table
-  getIndex(value) { return -2 }
+  getIndex(value) { return -2; }
+}
+
+
+export default class Walker extends Listener {
+  constructor(xpl) {
+    super();
+    this.xpl = xpl;
+    this.table = new Table(xpl.db, new Formulaic());
+
+    if (typeof process !== 'object') document.xplDebug = [];
+  }
+
+  // TODO: exitFreeFormulaic entry point
+
+  // TODO: patchDef entry point
+
+  exitTable(ctx) {
+    if (typeof process !== 'object') document.xplDebug.push(ctx);
+    this.table.addTable(ctx);
+  }
 }

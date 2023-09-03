@@ -4,7 +4,7 @@ import Lexer from '#Lexer';
 import Parser from '#Parser';
 import Walker from '#Walker';
 
-import DB from "#DB";
+import DB from '#DB';
 
 export default class XPL {
   constructor() {
