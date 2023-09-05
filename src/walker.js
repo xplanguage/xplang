@@ -6,7 +6,7 @@ class Table {
     this.formulaic = formulaic;
   }
 
-  addTable(tbl, parent = '__TABLE') {
+  async addTable(tbl, parent = 3) {
     let batch = [];
     let data = [];
 
@@ -14,7 +14,10 @@ class Table {
 
     if (tbl.tableData()) data = this.getData(tbl.tableData().children);
 
-    this.db.addTable(null, null, parent, batch, data);
+    await this.db.sql();
+    await this.db.addTable(1, 1, parent, batch, data);
+
+    console.table(await this.db.dumpTables());
   }
 
   getBatch(batch) {

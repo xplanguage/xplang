@@ -14,6 +14,8 @@
         "no-console": ["error", { "allow": ["table", "warn", "error", "debug"] }],
         "class-methods-use-this": "off",
         "no-underscore-dangle": "off",
-        "max-classes-per-file": "off"
+        "max-classes-per-file": "off",
+        "default-param-last": "off",
+        "no-await-in-loop": "off"
     }
 }

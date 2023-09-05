@@ -16,6 +16,7 @@
   "imports": {
     "#XPL": "./src/xpl.js",
     "#DB": "./src/db.js",
+    "#DBStatements": "./src/dbStatements.js",
     "#Walker": "./src/walker.js",
     "#Lexer": "./syntax/bindings/xplLexer.js",
     "#Parser": "./syntax/bindings/xplParser.js",
@@ -35,7 +36,10 @@
     "@sqlite.org/sqlite-wasm": "^3.43.0-build3",
     "antlr4": "4.13.0",
     "ejs": "^3.1.9",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "n": "^9.1.0",
+    "node-fetch": "^3.3.2",
+    "npm": "^10.0.0"
   },
   "devDependencies": {
     "eslint": "^8.48.0",

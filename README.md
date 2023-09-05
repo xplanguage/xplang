@@ -625,6 +625,10 @@ From there, you can run `npm run cli` or `npm run web` to see XPL in action. Hap
 
 There's nothing here but a relatively stable grammar and a basic outline of the vision. The next step is instantiating `sqlite` as a worker module, modeling the tables in sqlite, and then performing the transpilation from `walker.js` to the tabular intermediate representation in the database.
 
+## Issues
+
+- [ ] Currently only working in browser
+
 ## Get Involved
 
 I need help. Like, co-founder level help. Please help.
