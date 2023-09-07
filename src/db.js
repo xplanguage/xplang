@@ -30,47 +30,58 @@ export default class DB {
   }
 
   async createDb(sqlite) {
+    this.stmt = new Statements();
+    // await this.stmt.compile(sqlite);
+
     await sqlite.exec({
-      sql: `CREATE TABLE xpl_tables (
-            moduleId INTEGER NOT NULL,
-            patchId INTEGER NOT NULL,
+      sql: `CREATE TABLE xpl_types (
             parentId INTEGER NOT NULL,
-            tableId INTEGER PRIMARY KEY
+            typeId INTEGER PRIMARY KEY
           );`,
     });
 
-    this.stmt = new Statements();
-    await this.stmt.compile(sqlite);
+    const rootTypes = [
+      { parentId: 1, type: 1 }, // __NULL / @@
+      { parentId: 1, type: 2 }, // __FORMULA / @@@
+      { parentId: 1, type: 3 }, // __TABLE / #
+      { parentId: 3, type: 4 }, // __MODULE / #! -m ???
+      { parentId: 3, type: 5 }, // __PATCH / @@:: () {}
+      { parentId: 3, type: 6 }, // __NUMBER
+      { parentId: 6, type: 7 }, // __BOOLEAN / &
+      { parentId: 6, type: 8 }, // __STRING / $
+    ];
 
-    await this.addTable(0, 0, 1);
-    await this.addTable(0, 0, 1);
-    await this.addTable(0, 0, 1);
-    await this.addTable(0, 0, 3);
+    rootTypes.forEach(async (rootType) => {
+      await sqlite.exec({
+        sql: [
+          'INSERT INTO xpl_types VALUES($parentId, NULL);',
+        ],
+        bind: { $parentId: rootType.parentId },
+      });
+    });
 
     return sqlite;
   }
 
-  async dumpTables() {
-    return this.sql().then((sql) => sql.selectObjects(`
-      SELECT * FROM xpl_tables;
-    `));
+  async addType(moduleId, patchId, parentId = 3, batch = []) {
+    let rowId = null;
+    await this.sql().then((sql) => sql.exec({
+      sql: [
+        'INSERT INTO xpl_types VALUES($parentId, NULL);',
+        'SELECT last_insert_rowid();',
+      ],
+      bind: { $parentId: parentId },
+      callback: (row) => {
+        [rowId] = row;
+      },
+    }));
+
+    return rowId;
   }
 
-  async addTable(
-    moduleId = null,
-    patchId = null,
-    parentId = 3, // table table
-    batch = [],
-    data = [],
-  ) {
-    await this.stmt.$addTable.bind({
-      $moduleId: moduleId,
-      $patchId: patchId,
-      $parentId: parentId,
-    });
-    await this.stmt.$addTable.step();
-    await this.stmt.$addTable.reset();
-
-    // TODO: return tableId
+  async dumpTypes() {
+    return this.sql().then((sql) => sql.selectObjects(`
+      SELECT * FROM xpl_types;
+    `));
   }
 }

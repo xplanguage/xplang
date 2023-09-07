@@ -15,9 +15,12 @@ class Table {
     if (tbl.tableData()) data = this.getData(tbl.tableData().children);
 
     await this.db.sql();
-    await this.db.addTable(1, 1, parent, batch, data);
+    const typeId = await this.db.addType(1, 1, parent, batch);
 
-    console.table(await this.db.dumpTables());
+    // TODO: Implement instance
+    // const tableInstance = await this.db.addInstance(tableType, data);
+
+    // TODO: return instanceId
   }
 
   getBatch(batch) {
@@ -144,6 +147,9 @@ export default class Walker extends Listener {
 
   exitTable(ctx) {
     if (typeof process !== 'object') document.xplDebug.push(ctx);
-    this.table.addTable(ctx);
+
+    this.table.addTable(ctx)
+      .then((instanceId) => this.xpl.db.dumpTypes())
+      .then((tables) => console.table(tables));
   }
 }
