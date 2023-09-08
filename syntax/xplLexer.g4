@@ -22,6 +22,8 @@ Placeholder: '%';
 
 Star: '*';
 
+Tilda: '~';
+
 Bang: '!';
 
 Assign: ':';

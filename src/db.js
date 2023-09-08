@@ -147,25 +147,41 @@ export default class DB {
       },
     }));
 
-    const tableInfo = await this.sql().then((sql) => sql.selectObjects(`
+    const parentTable = await this.sql().then((sql) => sql.selectObjects(`
         PRAGMA TABLE_INFO('xpl_type_${parentId}');
     `));
 
-    // console.log(this.table2sql(`xpl_type_${rowId}`, tableInfo));
+    console.table(batch);
+
+    const childTable = this.batch2table(batch);
+
+    await this.sql().then((sql) => sql.exec({
+      sql: this.table2sql(`xpl_type_${rowId}`, [...parentTable, ...childTable]),
+    }));
 
     await this.sql().then((sql) => sql.exec({ sql: 'RELEASE addType;' }));
 
+    // TODO: Figure out how to do private, protected, and (maybe) default value?
     return rowId;
   }
 
   // async addInstance(moduleId, patchId, typeId, batch = []) {}
+
+  batch2table(batch) {
+    return batch.map((field) => ({
+      name: field.label,
+      type: 'INTEGER',
+      notnull: field.nullable ? 0 : 1,
+      pk: 0,
+    }));
+  }
 
   table2sql(name, fields = []) {
     const fieldString = fields.map((field) => {
       const notnull = field.notnull ? ' NOT NULL' : '';
       const pk = field.pk ? ' PRIMARY KEY' : '';
 
-      return `\t${field.name} ${field.type}${notnull}${pk}`;
+      return `\t"${field.name}" ${field.type}${notnull}${pk}`;
     }).join(',\n');
 
     return `CREATE TABLE ${name} (\n${fieldString}\n) STRICT;`;

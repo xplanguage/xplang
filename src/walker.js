@@ -31,8 +31,8 @@ class Table {
 
       const item = {};
 
-      item.private = batchItem.private !== false;
-      item.protect = batchItem.protect !== false;
+      item.private = batchItem.priv() ? true : false;
+      item.protect = batchItem.prot() ? true : false;
 
       if (!batchItem.type()) {
         item.type = '_number';
@@ -52,10 +52,10 @@ class Table {
 
       item.label = batchItem.batchLabel().getText();
 
-      item.mutable = batchItem.mutable !== false;
-      item.nullable = batchItem.nullable !== false;
+      item.mutable = batchItem.mutable() ? true : false;
+      item.nullable = batchItem.nullable() ? true : false;
 
-      item.unique = batchItem.unique !== false;
+      item.unique = batchItem.unique() ? true : false;
 
       if (item.type === '_null') {
         item.primitive = true;

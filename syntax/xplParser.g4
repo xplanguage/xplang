@@ -34,12 +34,12 @@ piped: Pipe alias? formulaicPiped;
 alias: Label Assign;
 
 batch: ParenOpen  batchItem* ParenClose;
-batchItem: type? protect? priv? batchLabel mutable? nullable? unique? (Assign batchDefault)?;
+batchItem: type? prot? priv? batchLabel mutable? nullable? unique? (Assign batchDefault)?;
 batchDefault: formulaic | formulaDef | null;
-protect: Bang;
+prot: Bang;
 priv: Bang;
-mutable: Bang;
-nullable: Bang;
+mutable: Tilda;
+nullable: Tilda;
 unique: Star;
 batchLabel: Label;
 null: Null;

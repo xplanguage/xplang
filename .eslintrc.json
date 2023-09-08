@@ -16,6 +16,7 @@
         "no-underscore-dangle": "off",
         "max-classes-per-file": "off",
         "default-param-last": "off",
-        "no-await-in-loop": "off"
+        "no-await-in-loop": "off",
+        "no-unneeded-ternary": "off"
     }
 }

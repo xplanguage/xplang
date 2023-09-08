@@ -290,14 +290,14 @@ You can decorate the field label with the following symbols to alter its behavio
 
 | Private | Protected | Field | Mutable | Nullable | Unique |
 |:-------:|:---------:|:-----:|:-------:|:--------:|:------:|
-|    !    |     !     | field |    !    |    !     |   *    |
+|    !    |     !     | field |    ~    |    ~     |   *    |
 
      1: @@:: (
      2:     !a ## protected
      3:     !!a ## private and protected
-     4:     a! ## mutable
-     5:     a!! ## mutable and nullable
-     6:     a* ## unique 
+     4:     a~ ## mutable
+     5:     a~~ ## mutable and nullable
+     6:     a* ## unique
      7: )
 
 A "protected" field is one that can be read outside the patch but can only be modified internally.
