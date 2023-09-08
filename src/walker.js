@@ -15,7 +15,7 @@ class Table {
     if (tbl.tableData()) data = this.getData(tbl.tableData().children);
 
     await this.db.sql();
-    const typeId = await this.db.addType(1, 1, parent, batch);
+    const typeId = await this.db.addType(parent, batch);
 
     // TODO: Implement instance
     // const tableInstance = await this.db.addInstance(tableType, data);
@@ -150,6 +150,8 @@ export default class Walker extends Listener {
 
     this.table.addTable(ctx)
       .then((instanceId) => this.xpl.db.dumpTypes())
-      .then((tables) => console.table(tables));
+      .then((types) => console.table(types))
+      .then(() => this.xpl.db.dumpInstances())
+      .then((instances) => console.table(instances));
   }
 }
