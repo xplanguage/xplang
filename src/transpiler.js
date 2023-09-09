@@ -1,13 +1,9 @@
-import Listener from '#Listener';
-
-/*
-class Table {
-  constructor(db, formulaic) {
-    this.db = db;
-    this.formulaic = formulaic;
+export default class Transpiler {
+  constructor(sql) {
+    this.sql = sql;
   }
 
-  async addTable(tbl, parent = 3) {
+  async addTable(tbl, parent = 2) {
     let batch = [];
     let data = [];
 
@@ -15,8 +11,7 @@ class Table {
 
     if (tbl.tableData()) data = this.getData(tbl.tableData().children);
 
-    await this.db.sql();
-    const typeId = await this.db.addType(parent, batch);
+    const typeId = await this.addType(parent, batch);
 
     // TODO: Implement instance
     // const tableInstance = await this.db.addInstance(tableType, data);
@@ -92,6 +87,26 @@ class Table {
     return batchItems;
   }
 
+  batch2table(batch) {
+    return batch.map((field) => ({
+      name: field.label,
+      type: 'INTEGER',
+      notnull: field.nullable ? 0 : 1,
+      pk: 0,
+    }));
+  }
+
+  table2sql(name, fields = []) {
+    const fieldString = fields.map((field) => {
+      const notnull = field.notnull ? ' NOT NULL' : '';
+      const pk = field.pk ? ' PRIMARY KEY' : '';
+
+      return `\t"${field.name}" ${field.type}${notnull}${pk}`;
+    }).join(',\n');
+
+    return `CREATE TABLE ${name} (\n${fieldString}\n) STRICT;`;
+  }
+
   getData(data) {
     const rows = [];
     data.forEach((dataRow) => {
@@ -112,8 +127,9 @@ class Table {
         } else {
           item.primitive = false;
 
-          const value = this.formulaic.createValue(dataItem);
-          item.value = this.formulaic.getIndex(value);
+          // TODO: Implement formulas
+          // const value = this.formulaic.createValue(dataItem);
+          // item.value = this.formulaic.getIndex(value);
         }
 
         row.push(item);
@@ -123,29 +139,35 @@ class Table {
     });
     return rows;
   }
-}
 
-class Formulaic {
-  // TODO: implement creating custom type fields
-  createValue(value) { return -1; }
+  async addType(parentId = 3, batch = []) {
+    await this.sql.exec({ sql: 'SAVEPOINT addType;' });
 
-  // TODO: implement returning index of custom field table
-  getIndex(value) { return -2; }
-}
+    let rowId = null;
+    await this.sql.exec({
+      sql: [
+        'INSERT INTO xpl_types VALUES($parentId, NULL);',
+        'SELECT last_insert_rowid();',
+      ],
+      bind: { $parentId: parentId },
+      callback: (row) => {
+        [rowId] = row;
+      },
+    });
 
-*/
+    const parentTable = await this.sql.selectObjects(`
+        PRAGMA TABLE_INFO('xpl_type_${parentId}');
+    `);
 
-export default class Walker extends Listener {
-  constructor(xpl) {
-    super();
-    this.xpl = xpl;
-  }
+    const childTable = this.batch2table(batch);
 
-  // TODO: exitFreeFormulaic entry point
+    await this.sql.exec({
+      sql: this.table2sql(`xpl_type_${rowId}`, [...parentTable, ...childTable]),
+    });
 
-  // TODO: patchDef entry point
+    await this.sql.exec({ sql: 'RELEASE addType;' });
 
-  exitTable(ctx) {
-    this.xpl.tpl.addTable(ctx);
+    // TODO: Figure out how to do private, protected, and (maybe) default value?
+    return rowId;
   }
 }

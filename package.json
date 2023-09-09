@@ -16,11 +16,11 @@
   "imports": {
     "#XPL": "./src/xpl.js",
     "#DB": "./src/db.js",
-    "#DBStatements": "./src/dbStatements.js",
     "#Walker": "./src/walker.js",
     "#Lexer": "./syntax/bindings/xplLexer.js",
     "#Parser": "./syntax/bindings/xplParser.js",
-    "#Listener": "./syntax/bindings/xplParserListener.js"
+    "#Listener": "./syntax/bindings/xplParserListener.js",
+    "#Transpiler": "./src/transpiler.js"
   },
   "repository": {
     "type": "git",
