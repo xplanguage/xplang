@@ -48,14 +48,14 @@ patchDef: matcher patchParent? (batch hatch | batch | hatch);
 patchParent: BraceOpen formulaic BraceClose;
 
 batch: ParenOpen  batchItem* ParenClose;
-batchItem: type? prot? priv? batchLabel mutable? nullable? unique?
+batchItem: type? prot? priv? batchLabel nullable? mutable? unique?
 	(Assign batchDefault)?;
 batchDefault: formulaic | formulaDef | null;
 prot: Bang;
 priv: Bang;
-mutable: Tilda;
-nullable: Tilda;
-unique: Star;
+nullable: Null;
+mutable: Star;
+unique: TableOpen Star TableClose;
 batchLabel: Label;
 null: Null;
 

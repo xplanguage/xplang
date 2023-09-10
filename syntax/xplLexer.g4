@@ -22,8 +22,6 @@ Placeholder: '%';
 
 Star: '*';
 
-Tilda: '~';
-
 Bang: '!';
 
 Assign: ':';
@@ -34,9 +32,9 @@ Dot: '.';
 
 ParentCall: '\\\\';
 
-TypeFormulaic: '@@@';
-Null: '@@';
+Null: '~';
 TypeCustom: '@';
+TypeFormulaic: '@@';
 TypeTable: '#';
 TypeBoolean: '&';
 TypeString: '$';
