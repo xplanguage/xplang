@@ -8,14 +8,14 @@ Alert: You may wish to scroll to the bottom for the Status. This project isn't d
 
 ### Everything is a table
 
-Okay, you also have formulas. Then you have formulaic tables and tabular formulas.
-
     [3 `fizz`]
     [5 `buzz`]
 
+Okay, you also have formulas. Then you have formulaic tables and tabular formulas.
+
 ### No Boilerplate
 
-You can dive right into the console and begin solving problems with tables and formulas.
+You can dive right into the console and begin solving problems.
 
      `The answer is { +(21 21) }.`
 
@@ -56,15 +56,15 @@ Paradigmatically pure languages like C (variables), APL (arrays), Lisp (linked l
 
 This is a crisis for modern programming, making the discipline needlessly complex and confusing. Because every interface is bespoke, there can be none of the accretivity that one finds with unix's elegantly stream-oriented shell scripting languages.
 
-There's a valid reason for the crisis, as real world systems and processes are often not expressible as variables, streams, vectors, arrays, or lists. The solution has been to staple the ability to design arbitrary interfaces onto languages that are intrinsically variable, stream, array, or list oriented or whatever.
+There's a valid reason for the crisis, as real world systems and processes are often not expressible as variables, streams, vectors, arrays, or lists. The solution has been to staple the ability to design arbitrary interfaces onto languages that are intrinsically variable, array, or list oriented or whatever.
 
 But absolutely every system and process can indeed be defined in terms of relational tables of data, presuming one permits tabular formulas and formulaic tables. Therefore, if one creates a general purpose programming language that's table-oriented, the design of custom types can be performed within the same paradigm as the language itself, interacting with one another in terms tabular terms.
 
-In theory, an elegant new programming language can be designed that's a dialect of SQL while looking nothing like and being suitable for solving just about every problem with a computer. XPL is an attempt to prove that theory.
+In theory, an elegant new programming language can be designed that's a dialect of SQL while looking nothing like it and being suitable for solving just about every problem with a computer. XPL is an attempt to prove that theory.
 
 ## Syntax
 
-The syntax of XPL does not belong to any existing family, though it borrows from and has similarities to several.
+The syntax of XPL does not belong to any existing family, though it borrows from and has similarities to several. The goal is clarity and simplicity, with the target audience being people who have not coded before.
 
 ### Comments
 
@@ -603,7 +603,11 @@ From there, you can run `npm run cli` or `npm run web` to see XPL in action. Hap
 
 ## Status
 
-There's nothing here but a relatively stable grammar and a basic outline of the vision. The next step is instantiating `sqlite` as a worker module, modeling the tables in sqlite, and then performing the transpilation from `walker.js` to the tabular intermediate representation in the database.
+The grammar is mature. The current work is in using the listener to walk through the grammar and transpile it into its sqlite tabular representation.
+
+There's some drudgery to be done in adapting the parser to permit the most elegant transpilation code. Once that's done, the first goal is to be able to write an anonymous table and have both its structure and its (integer-only) data stored in the database correctly.
+
+I can't seem to get sqlite-wasm to work in node mode, and am stuck in the browser for now. The error appears to pertain to node-fetch. I'm hoping it gets resolved for me upstream.
 
 ## Issues
 
