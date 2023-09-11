@@ -2,21 +2,26 @@
 
 XPL is a general purpose programming language for the rapid development of data-driven, web-native solutions. It is monoparadigmatically table-oriented, storing, representing, and manipulating data in terms of relational tables.
 
-Alert: You may wish to scroll to the bottom for the Status. This is a new project.
+Alert: You may wish to scroll to the bottom for the Status. This project isn't done.
 
 ## Features
 
-### Zero Boilerplate
+### Everything is a table
 
-XPL has no keywords, operators, or paradigms to memorize. Everything is either a table, a formula, or some kind of magical table or magical formula.
+Okay, you also have formulas. Then you have formulaic tables and tabular formulas.
 
-     `Hello, world!`
+    [3 `fizz`]
+    [5 `buzz`]
+
+### No Boilerplate
+
+You can dive right into the console and begin solving problems with tables and formulas.
+
+     `The answer is { +(21 21) }.`
 
 ### Simple Syntax
 
-Making everything a formula or a table makes the language much more elegant, but the syntax will feel a little foreign to modern programmers.
-
-For example, instead of `21 + 21`:
+There are no operators or keywords in XPL. Even adding is done with the `+()` formula. For example, instead of `21 + 21`:
 
      +(21 21)
 
@@ -41,47 +46,25 @@ The output is:
 | 42  | 14  |  2  | 14  |
 | 42  |  7  |  3  | 21  |
 
-This approach brings the dataflow functionality found in spreadsheets and database views to general purpose programming.
-
-### Progressive Programming
-
-XPL is designed to be as useful as possible as quickly as possible. It's structured so that power users can arrive at spreadsheet-style solutions to *ad hoc* problems in minutes, while offering a gentle progression to achieving more sophisticated solutions.
-
-| Level | Master     | Ability                             |
-|:-----:| ---------- | ----------------------------------- |
-|   1   | Formulas   | Perform simple calculations         |
-|   2   | Tables     | Deliver spreadsheet-style solutions |
-|   3   | Patches    | Implement simple macros             |
-|   4   | Exceptions | Do side effects and conditionals    |
-|   5   | Queries    | Join tables together                |
-|   5   | Types      | Model complex objects               |
+This approach brings the innately parallel dataflow functionality found in spreadsheets and database views to general purpose programming.
 
 ## Philosophy
 
-Computer programming languages are only valuable to the extent that they elegantly implement paradigms that facilitate accretivity. 
+Programming languages dictate an abstract paradigm for how one creates, reads, updates, and deletes data. That's what a language is, a *language* one uses to solve the problem. If a programming language enables multiple paradigms, then it ceases to be a programming language at all, but a sort of metalinguistic alphabet with which one can solve problems in multiple incompatible and mutually unintelligible languages.
 
-There have been three major accretivity explosions in the history of computer science: unix, spreadsheets, and databases. These were enabled by the elegant implementation of strict paradigms, respectively: streams, arrays, and tables.
+Paradigmatically pure languages like C (variables), APL (arrays), Lisp (linked lists), and SQL (relational tables) ensure that what's written by one person in the language can be read by another person who's proficient in the language. This cannot be said for the popular multiparadigmatic languages.
 
-The "unix philosophy" leveraging C and shell scripting succeeded because when you have a restrictive paradigm, it becomes possible to build accretively. There's a common interface for interfacing between the different components, relieving the problem solver of the metaprogramming overhead of designing bespoke interfaces between every different thing.
+This is a crisis for modern programming, making the discipline needlessly complex and confusing. Because every interface is bespoke, there can be none of the accretivity that one finds with unix's elegantly stream-oriented shell scripting languages.
 
-Unix isn't the only place where this occurred. The spreadsheet achieved a similar revolution for business power users, enabling the rapid development of sophisticated solutions to arbitrary business problems. The relational database is the final such explosion, with SQL facilitating the elegant modeling of data and its complex relationships.
+There's a valid reason for the crisis, as real world systems and processes are often not expressible as variables, streams, vectors, arrays, or lists. The solution has been to staple the ability to design arbitrary interfaces onto languages that are intrinsically variable, stream, array, or list oriented or whatever.
 
-|  #  | Dimension | Paradigm | Ecosystem    | Framework           |
-|:---:| --------- | -------- | ------------ | ------------------- |
-|  1  | Scalar    | Stream   | Files        | C / Unix            |
-|  2  | Vector    | Array    | Spreadsheets | APL / Emacs / Excel |
-|  3  | Matrix    | Table    | Databases    | SQL / **_XPL_**     |
-|  n  | Tensor    | Object   | Applications | C++ / Javascript    |
+But absolutely every system and process can indeed be defined in terms of relational tables of data, presuming one permits tabular formulas and formulaic tables. Therefore, if one creates a general purpose programming language that's table-oriented, the design of custom types can be performed within the same paradigm as the language itself, interacting with one another in terms tabular terms.
 
-Not everything is a stream, and eventually the `C` programming language gave way to the `C++` metaprogramming language that permitted the creation of arbitrary objects that arbitrarily interface with one another in arbitrary ways. With noble exceptions, all modern programming languages are ALGOL-derived stream-oriented programming languages with metaprogramming functionality stapled onto the side.
-
-The noble exceptions are array-oriented languages like APL, Lisp, Clojure, and others that replace streams as the paradigm with arrays or lists. Array-oriented programming languages ultimately fall between two stools, as not everything is a list of things, requiring metaprogramming that's stapled onto the languages in various ways (when the languages bother).
-
-What's missing is a table-oriented general purpose programming language that relies upon the relational table as the paradigm. Not only can tables natively represent more real world data than either streams or arrays, but metaprogramming itself can also be performed in tabular terms.
-
-In theory, an elegant and simple general purpose programming language can be designed that's monoparadigmatically table-oriented. It will enable the design of complex "types" in the language of relational tables that interface with one another in relational, tabular terms. XPL is that attempt.
+In theory, an elegant new programming language can be designed that's a dialect of SQL while looking nothing like and being suitable for solving just about every problem with a computer. XPL is an attempt to prove that theory.
 
 ## Syntax
+
+The syntax of XPL does not belong to any existing family, though it borrows from and has similarities to several.
 
 ### Comments
 
@@ -90,7 +73,7 @@ In theory, an elegant and simple general purpose programming language can be des
 |    `##`     | Single line comment | `## This is a comment` |
 | `#* ... *#` | Multiline comments  | `#* multiple lines *#` |
 |    `#:`     | Annotation          | `#: Slope of line`     |
-|    `#!`     | Hashbang            | `#!/usr/bin/env xpl`   | 
+|    `#!`     | Hashbang            | `#!/usr/bin/env xpl`   |
 
 Single line and multiline comments are self-explanatory.
 
@@ -102,7 +85,7 @@ The hashbang is embraced from the unix ecosystem and extended for much more than
 
 Decimal numbers are the default type in XPL. When defining a field as a decimal number, you need no type decoration.
 
-    @@:: (a: 6.481) { *(a a) }
+    ~: (a: 6.481) { *(a a) }
 
 This is a valid program:
 
@@ -130,13 +113,11 @@ There is no such thing as precision or overflow in the native number type. Howev
 
 This is a feature for people who don't care to figure out how microprocessors handle floating point arithmetic, but if performance matters then you'll want to rely on a more primitive type that's much faster but doesn't protect the programmer from precision and overflow errors.
 
-That will be explored later.
-
 ### Strings
 
 String fields are defined with a `$` symbol before the field name.
 
-    @@:: ($greeting: `Hello, world!`) { greeting }
+    ~: ($greeting: `Hello, world!`) { greeting }
 
 Stringl are enclosed in backticks rather than quotes.
 
@@ -154,7 +135,7 @@ To include curly braces, simply escape the opening one with a backslash:
 
 Boolean (true/false) values are defined with a `&` before the field name.
 
-    @@:: (&isProduction: 1) { if(isProduction `We're live!`) }
+    ~: (&isProduction: 1) { if(isProduction `We're live!`) }
 
 There's no special symbol for true or false. It's just `1` or `0`.
 
@@ -164,7 +145,7 @@ If something other than `1` or `0` is given, the boolean type will attempt to ca
 
 Tables are defined with a `#` before the field name.
 
-     1: @@:: (
+     1: ~: (
      2:     #slopeTable: (y: { +(*(m x) b) } m x b)
      3:         [3 7 21]
      4: ) { slopeTable }
@@ -173,15 +154,14 @@ When you define a table field, you include the `(` batch `)` of fields for the t
 
 ### Formulas
 
-Formulas are defined with the type of whatever the formula returns. You can, however, use the formulaic (`@@@`) type to indicate that the field can be any type. This opts out of safety and is not a "best practice" for developing enterprise applications, but can be useful in some cases.
+Formulas are defined with the type of whatever the formula returns. You can, however, use the formulaic (`@@`) type to indicate that the field can be any type. This opts out of safety and is not a "best practice" for developing enterprise applications, but can be useful in some cases.
 
-     1: @@:: (
-         @@@ y: { +(*(m x) b) }
-         m
-         x
-         b
-       )
-
+     1: ~: (
+     2:     @@ y: { +(*(m x) b) }
+     3:     m
+     4:     x
+     5:     b
+     6: )
 
 XPL doesn't doom you to parentheses hell. Pipes (`|`) and placeholders (`%`) help you break up nest expressions.
 
@@ -190,7 +170,7 @@ Instead of:
     +(*(-8 -4) -33)
 
 You can do:
-    
+
     *(-8 -4) | +(% -33)
 
 Pipes are only allowed in the console, formula definitions, and hatches. This is enforced for readability. Those are the only places where complex, deeply nested formulas are appropriate. They are not allowed when you're defining a batch field or when you're creating a formulaic match. Permitting them in that context invites unreadable code.
@@ -203,23 +183,23 @@ While you can call a formula with unnamed arguments, relying on the order in whi
 
 Exceptions are the magic formulas that make the Exceptional Programming Language truly *exceptional*. They break the flow of execution out of the formula.
 
-     1: @@:: { pitch(cutInHalf:: 84)}
+     1: ~: { pitch(cutInHalf: 84)}
      2:
-     3: cutInHalf:: (cutMe) { /(cutMe 2) }
+     3: cutInHalf: (cutMe) { /(cutMe 2) }
 
-There are two ways to send a value to the exceptional. If you place it within `<` brackets `>` immediately after the `::` declaration, then it is sent by reference and becomes the "context" for the patch that matches and catches what's pitched or thrown. By default, the values will be sent the same way values are always sent to formulas, which is by value.
+There are two ways to send a value to the exceptional. If you place it within `<` brackets `>` immediately after the `:` declaration, then it is sent by reference and becomes the "context" for the patch that matches and catches what's pitched or thrown. By default, the values will be sent the same way values are always sent to formulas, which is by value.
 
 If the context is not a table, then it can be accessed with `%%`.
 
-     1: @@:: { pitch(cutInHalf:: <84>) }
+     1: ~: { pitch(cutInHalf: <84>) }
      2:
-     3: cutInHalf:: { /(%% 2) }
+     3: cutInHalf: { /(%% 2) }
 
 If the context is a table, the patch executes for every row in the table. In the following example, a table with two rows is sent to the patch, which executes twice.
 
-     1: @@:: { pitch(cutInHalf:: <[84][-84]>) }
+     1: ~: { pitch(cutInHalf: <[84][-84]>) }
      2:
-     3: cutInHalf:: { /(%% 2) }
+     3: cutInHalf: { /(%% 2) }
 
 With "pitch", the field is returned to the original formula and patch. The other exceptional formulas enable alternative behavior.
 
@@ -240,47 +220,47 @@ Patches are magic tables with matches and hatches that can include formulas that
 
 | Match     | Parent     | Batch     | Hatch         |
 | --------- | ---------- | --------- | ------------- |
-| `label::` | `<parent>` | `(a b c)` | `{ +(a b c)}` |
+|  `label:` | `<parent>` | `(a b c)` | `{ +(a b c)}` |
 
 Fields can't be defined outside of a patch. While a lot of evaluation can be achieved in the root level of the console, an XPL program, module, or script is generally a collection of patches that interact with one another.
 
 ### Matches
 
-The simplest sort of "match" is the label. There's one special label, the "null label," (`@@::`) which is instantiated when the program, module, or script is loaded. It's the entrypoint for your program and whatever fields are public in its batch are visible in the environment.
+The simplest sort of "match" is the label. There's one special label, the "null label," (`~:`) which is instantiated when the program, module, or script is loaded. It's the entrypoint for your program and whatever fields are public in its batch are visible in the environment.
 
 The match can also be a number, string, boolean, formula, regular expression pattern, or "path."
 
 Literals:
 
-     1: @@:: { throw(42:: <`Moon`>)}
+     1: ~: { throw(42: <`Moon`>)}
      2: 
-     3: 42:: { `Good night, {%%}.` }
+     3: 42: { `Good night, {%%}.` }
 
 Formulaic (contextual):
 
-     1: @@:: { throw(42::)}
+     1: ~: { throw(42: <>)}
      2: 
-     3: %(%% 2):: { `It's even!` }
+     3: %(%% 2): { `It's even!` }
 
 Formulaic (equality):
 
-     1: @@:: { throw(42::)}
+     1: ~: { throw(42: <>)}
      2: 
-     3: =(/(84 2)):: { `It's 42!` }
+     3: =(/(84 2)): { `It's 42!` }
 
 Pattern:
 
-     1: @@:: { throw(`bananas`::) }
+     1: ~: { throw(`bananas`: <>) }
      2:
-     3: "s$":: { `It ends with the letter s` }
+     3: 's$': { `It ends with the letter s` }
 
 There are also `^` open patterns `^` that use a different regular expression syntax, deal with white space differently, can span multiple lines, and can include comments.
 
-Path: 
+Path:
 
 Paths are handy for when the XPL program possesses a context, such as a web page's DOM or a context piped into it from the command line.
 
-     1: /img{=(id `kittens`)}:: { set(src `kittens.jpeg`) }
+     1: /img{=(id `kittens`)}: { set(src `kittens.jpeg`) }
 
 ### Batches
 
@@ -288,16 +268,16 @@ Formula definitions, tables, and patches all contain batches. They're where fiel
 
 You can decorate the field label with the following symbols to alter its behavior.
 
-| Private | Protected | Field | Mutable | Nullable | Unique |
-|:-------:|:---------:|:-----:|:-------:|:--------:|:------:|
-|    !    |     !     | field |    ~    |    ~     |   *    |
+| Private | Protected | Field | Nullable | Mutable  | Unique |
+|:-------:|:---------:|:-----:|:--------:|:--------:|:------:|
+|   `!`   |    `!`    | field |   `~`    |   `*`    | `[*]`  |
 
-     1: @@:: (
+     1: ~: (
      2:     !a ## protected
      3:     !!a ## private and protected
-     4:     a~ ## mutable
-     5:     a~~ ## mutable and nullable
-     6:     a* ## unique
+     4:     a* ## mutable
+     5:     a~* ## nullable and mutable
+     6:     a[*] ## unique
      7: )
 
 A "protected" field is one that can be read outside the patch but can only be modified internally.
@@ -328,7 +308,7 @@ In a well-written XPL program, everything is defined and constrained to a suffic
 
 XPL has core, primitive, native, library, and custom types.
 
-The core types are decimal numbers, strings (`$`), booleans (`&`), tables (`#`), null (`@@`) and formulaic (`@@@`). They have the special symbols in the syntax.
+The core types are decimal numbers, strings (`$`), booleans (`&`), tables (`#`), null (`~`) and formulaic (`@@`). They have the special symbols in the syntax.
 
 The primitive types are a selection of types directly associated with WebAssembly primitives. Every other type is derived from one of these primitive types.
 
@@ -345,7 +325,7 @@ The primitive types are a selection of types directly associated with WebAssembl
 
 Native types are the types that are available without importing any modules. One example is `@number`:
 
-     1: @@:: (
+     1: ~: (
      2:    @number(precision: 2 scale: 0 radix: 10) n: 42
      3: )
 
@@ -360,13 +340,13 @@ Library types are types that you must import from the standard libraries.
 
 Types are just a magical patch that implements (or inherits) certain formulas.
 
-     1: @@:: (@salary payroll: 1,000)
+     1: ~: (@salary payroll: 1,000)
      2:
      3: salary: <number(5)> (
      4:     set: (n) {
      5:         if(
      6:             <(n 0)
-     7:             throw(`salart can't be negative`)
+     7:             throw(`salary can't be negative`)
      8:             \\set(n)
      9:         )
     10:     }
@@ -400,7 +380,7 @@ The xml file looks like this:
 
 Your XPL script looks like this:
 
-    /employees/employee[=(status `temp`)]:: { delete() }
+    /employees/employee[=(status `temp`)]: { delete() }
 
 For this XPL script to modify the `employees.xml` file, you'll need to let it know what file it's receiving as input and how to handle that input. In this case, it's an XML file, so this would work:
 
@@ -412,7 +392,7 @@ That's the command line way to do it. You can also do it in your shebang, so tha
      2: #! -t "text/xml"
      3: #! -c employees.xml
      4:
-     5: /employees/employee[=(status `temp`)]:: { delete() }
+     5: /employees/employee[=(status `temp`)]: { delete() }
 
 Then you can just enter this in the shell:
 
@@ -465,9 +445,9 @@ Pro-Tip: Including a password in the script is a terrible idea. In practice, use
 
 When you do this, the database becomes the context, and you can access it with path directives:
 
-    #!/usr/bin/env xpl -t mysql -H localhost
-    
-    /wp_users[=(id 1)]:: { set(user_login `webmaster`) }
+     1: #!/usr/bin/env xpl -t mysql -H localhost
+     2:
+     3: /wp_users[=(id 1)]: { set(user_login `webmaster`) }
 
 * Filter
 
@@ -546,10 +526,10 @@ You can import modules through the environment or command line arguments, though
 
 Let's say your script imports `fs`, the filesystem module.
 
-    #!/usr/bin/env xpl
-    #! -m fs
-    
-    @@:: { fs.pwd() }
+     1: #!/usr/bin/env xpl
+     2: #! -m fs
+     3:
+     4: ~: { fs.pwd() }
 
 But let's say there's an experimental new feature in `fs` that you want to use which isn't available in the stable release. Rather than changing your script, you could:
 
@@ -563,19 +543,19 @@ Only XPL project folders, XPL files, and WebAssembly modules can be imported.
 
 ### XPL_SET (`--set / -s`): Set field
 
-This enables the inclusion of integers, decimals, and strings into the batch definition of the `@@` patch.
+This enables the inclusion of integers, decimals, and strings into the batch definition of the `~` patch.
 
-    #!/usr/bin/env xpl
-    #! -m math 
-    #! -s circumference 40,075.0
-    
-    @@:: (!circumference: @@) { pitch(getDiameter:: { circumference }) }
-    
-    getDiameter:: { /(% math.pi) }
+     1: #!/usr/bin/env xpl
+     2: #! -m math
+     3: #! -s circumference 40,075.0
+     4:
+     5: ~: (!circumference: ~) { pitch(getDiameter: <circumference>) }
+     6:
+     7: getDiameter: { /(%% math.pi) }
 
 In this example, `getDiameter.en.xpl`, the program outputs the diameter in kilometers of the planet Earth. The circumference of Earth is set with a shebang declaration. This could be overriden with environment variables or the command line with a different number for different units of measurement, different planets, or whatever.
 
-Notably, the `circumference` field is not flagged as nullable but is set as null (`@@`). This means that a value must be passed to `circumference` or the patch can't instantiate. But since the definition is flagged as private (`!`), a module that imported it couldn't set the circumference. Only the `--set` directive can work here.
+Notably, the `circumference` field is not flagged as nullable but is set as null (`~`). This means that a value must be passed to `circumference` or the patch can't instantiate. But since the definition is flagged as private (`!`), a module that imported it couldn't set the circumference. Only the `--set` directive can work here.
 
 ## Implementation
 

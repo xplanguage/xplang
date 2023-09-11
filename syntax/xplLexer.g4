@@ -19,17 +19,11 @@ FormulaChar: [-~!@#$%^&_+*=<>?/]+ ParenOpen;
 
 Context: '%%';
 Placeholder: '%';
-
 Star: '*';
-
 Bang: '!';
-
 Assign: ':';
-
 Pipe: '|';
-
 Dot: '.';
-
 ParentCall: '\\\\';
 
 Null: '~';
@@ -39,16 +33,11 @@ TypeTable: '#';
 TypeBoolean: '&';
 TypeString: '$';
 
-HexInteger: '-'? '0' [xX] HexDigit (HexDigit | '_')*;
+HexInteger: '-'? '0' [xX] HexDigit (HexDigit | ',')*;
+OctalInteger: '-'? '0' OctalDigit (OctalDigit | ',')*;
+DecimalInteger: '0' | [1-9] (DecimalDigit | ',')* | DecimalDigit+ ExponentPart;
 
-OctalInteger: '-'? '0' OctalDigit (OctalDigit | '_')*;
-
-DecimalInteger:
-    '0'
-    | [1-9] (DecimalDigit | '_')*
-    | DecimalDigit+ ExponentPart;
-Decimal:
-    '-'? DecimalInteger (
+Decimal: '-'? DecimalInteger (
         Dot DecimalDigit* ExponentPart?
         | DecimalDigit+ ExponentPart?
         | DecimalInteger ExponentPart?

@@ -31,13 +31,9 @@ parentCall: ParentCall;
 context: Context;
 placeholder: Placeholder;
 
-exceptional:
-	formulaLabel
-	matcher
-	(BraceOpen caught? BraceClose)
-	formulaCallItem* ParenClose;
+exceptional: formulaLabel matcher (BraceOpen caught? BraceClose) formulaCallItem* ParenClose;
 caught: formulaic;
-matcher: (formulaic Assign) | path;
+matcher: ((formulaic | pattern) Assign) | path;
 
 table: (batch tableData) | batch | tableData;
 tableData: tableRow+;
@@ -62,7 +58,7 @@ null: Null;
 hatch: CurlyOpen formulaicPiped* CurlyClose;
 
 type: typeFormulaic | null | typeString | typeBoolean | typeTable |
-	((TypeCustom typeLabel) (ParenOpen formulaCallItem+ ParenClose)?);
+	(TypeCustom typeLabel) (ParenOpen formulaCallItem+ ParenClose)?;
 typeTable: TypeTable;
 typeBoolean: TypeBoolean;
 typeString: TypeString;
