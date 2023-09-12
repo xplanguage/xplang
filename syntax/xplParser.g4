@@ -11,7 +11,7 @@ freeFormulaic: formulaicPiped;
 formulaDef: batch? CurlyOpen formulaicPiped CurlyClose;
 formulaicPiped: alias? formulaic piped?;
 piped: Pipe alias? formulaicPiped;
-alias: Label Assign;
+alias: Name Assign;
 
 formulaic
 	: (parentCall? formulaCall)
@@ -24,14 +24,14 @@ formulaic
 	| placeholder
 	| null;
 
-formulaCall: formulaLabel formulaCallItem* ParenClose;
-formulaLabel: (field ParenOpen | FormulaChar+);
-formulaCallItem: (label Assign)? formulaic;
+formulaCall: formulaName formulaCallItem* ParenClose;
+formulaName: (field ParenOpen | FormulaChar+);
+formulaCallItem: (name Assign)? formulaic;
 parentCall: ParentCall;
 context: Context;
 placeholder: Placeholder;
 
-exceptional: formulaLabel matcher (BraceOpen caught? BraceClose) formulaCallItem* ParenClose;
+exceptional: formulaName matcher (BraceOpen caught? BraceClose) formulaCallItem* ParenClose;
 caught: formulaic;
 matcher: ((formulaic | pattern) Assign) | path;
 
@@ -44,7 +44,7 @@ patchDef: matcher patchParent? (batch hatch | batch | hatch);
 patchParent: BraceOpen formulaic BraceClose;
 
 batch: ParenOpen  batchItem* ParenClose;
-batchItem: type? prot? priv? batchLabel nullable? mutable? unique?
+batchItem: type? prot? priv? batchName nullable? mutable? unique?
 	(Assign batchDefault)?;
 batchDefault: formulaic | formulaDef | null;
 prot: Bang;
@@ -52,22 +52,22 @@ priv: Bang;
 nullable: Null;
 mutable: Star;
 unique: TableOpen Star TableClose;
-batchLabel: Label;
+batchName: Name;
 null: Null;
 
 hatch: CurlyOpen formulaicPiped* CurlyClose;
 
 type: typeFormulaic | null | typeString | typeBoolean | typeTable |
-	(TypeCustom typeLabel) (ParenOpen formulaCallItem+ ParenClose)?;
+	(TypeCustom typeName) (ParenOpen formulaCallItem+ ParenClose)?;
 typeTable: TypeTable;
 typeBoolean: TypeBoolean;
 typeString: TypeString;
 typeFormulaic: TypeFormulaic;
-typeLabel: Label;
+typeName: Name;
 
-label: Label;
-module: Label;
-field: (module Dot)? label;
+name: Name;
+module: Name;
+field: (module Dot)? name;
 
 number: decimalInteger | decimal | hexInteger | octalInteger;
 decimalInteger: DecimalInteger;

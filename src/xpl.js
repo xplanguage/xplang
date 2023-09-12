@@ -46,7 +46,7 @@ export default class XPL {
       })
       .then(() => this.tpl.addType(2, [ // __FORMULA
         {
-          label: 'formulaId',
+          name: 'formulaId',
           type: 'INTEGER',
           notnull: true,
           pk: false,
@@ -54,19 +54,19 @@ export default class XPL {
       ]))
       .then(() => this.tpl.addType(2, [ // __MODULE
         {
-          label: 'alias',
+          name: 'alias',
           type: 'VARCHAR',
           notnull: true,
           pk: false,
         },
         {
-          label: 'uri',
+          name: 'uri',
           type: 'VARCHAR',
           notnull: true,
           pk: false,
         },
         {
-          label: 'edition',
+          name: 'edition',
           type: 'VARCHAR',
           notnull: true,
           pk: false,

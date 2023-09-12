@@ -23,7 +23,7 @@ export default class Transpiler {
     const batchItems = [];
 
     batch.forEach((batchItem) => {
-      if (!batchItem?.batchLabel) return;
+      if (!batchItem?.batchName) return;
 
       const item = {};
 
@@ -43,10 +43,10 @@ export default class Transpiler {
       } else if (batchItem.type().null_()) {
         item.type = '_null';
       } else {
-        item.type = batchItem.type().typeLabel().getText();
+        item.type = batchItem.type().typeName().getText();
       }
 
-      item.label = batchItem.batchLabel().getText();
+      item.name = batchItem.batchName().getText();
 
       item.mutable = batchItem.mutable() ? true : false;
       item.nullable = batchItem.nullable() ? true : false;
@@ -89,13 +89,13 @@ export default class Transpiler {
 
   batch2table(batch) {
     return batch.map((field) => ({
-      name: field.label,
+      name: field.name,
       type: 'INTEGER',
       notnull: field.nullable ? 0 : 1,
       pk: 0,
       unique: field.unique ? 1 : 0,
-      private: field.private ? 1 : 0,
-      protected: field.protected ? 1 : 0,
+      priv: field.priv? 1 : 0,
+      prot: field.prot? 1 : 0,
       mutable: field.mutable ? 1 : 0,
     }));
   }

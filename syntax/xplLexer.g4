@@ -43,7 +43,7 @@ Decimal: '-'? DecimalInteger (
         | DecimalInteger ExponentPart?
     )?;
 
-Label: [\p{L}_-] [\p{L}\p{N}_-]*;
+Name: [\p{L}_-] [\p{L}\p{N}_-]*;
 
 fragment DecimalDigit: [0-9];
 fragment HexDigit: [0-9a-fA-F];
