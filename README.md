@@ -48,6 +48,32 @@ The output is:
 
 This approach brings the innately parallel dataflow functionality found in spreadsheets and database views to general purpose programming.
 
+### Reactive Programming
+
+In addition to labeled patches that can be called by label, patches of code can also have matchers that are formulas, patterns, and paths. Patterns and paths can capture plain text or structured data from the context.
+
+This script uses a pattern `'^\d+$'` to accept every row of numbers in `fizzRaw.txt` and uses the modulo formula `%(x y)` to determine if a number is a multiple of 15, 5, or 3 and emit the proper fizzbuzz replacement. The `%%` is the "context placeholder," containing whatever was sent from the matcher.
+
+     1: #!/usr/bin/env xpl -c fizzRaw.txt
+     2:
+     3: '^\d+$': { ?(%(%% 15) ?(%(%% 5) ?(%(%% 3) %% `fizz) `buzz`) `fizzbuzz`) }
+
+That's a fun one-liner, but nested formulas can be difficult to read. Fortunately, you can (and should) use the pipe `|` and placeholder `%` to break nested expressions up.
+
+     1: #!/usr/bin/env xpl -c fizzRaw.txt
+     2:
+     3: '^\d+$': {
+     4:     ?(%(%% 15) %% `fizzbuzz`)
+     5:   | ?(%(%   5) %  `fizz`)
+     6:   | ?(%(%   3) %  `buzz`)
+     7: }
+
+This script reads the `employees.xml` file and fires all of the temps, with the modified copy of the file being read to standard output:
+
+     1: #!/usr/bin/env xpl -c employees.xml
+     2:
+     3: /employees/employee[{=(status `temp`)}]: { set(fired `true`) }
+
 ## Philosophy
 
 Programming languages dictate an abstract paradigm for how one creates, reads, updates, and deletes data. That's what a language is, a *language* one uses to solve the problem. If a programming language enables multiple paradigms, then it ceases to be a programming language at all, but a sort of metalinguistic alphabet with which one can solve problems in multiple incompatible and mutually unintelligible languages.
