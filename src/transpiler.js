@@ -93,6 +93,10 @@ export default class Transpiler {
       type: 'INTEGER',
       notnull: field.nullable ? 0 : 1,
       pk: 0,
+      unique: field.unique ? 1 : 0,
+      private: field.private ? 1 : 0,
+      protected: field.protected ? 1 : 0,
+      mutable: field.mutable ? 1 : 0,
     }));
   }
 
@@ -100,11 +104,19 @@ export default class Transpiler {
     const fieldString = fields.map((field) => {
       const notnull = field.notnull ? ' NOT NULL' : '';
       const pk = field.pk ? ' PRIMARY KEY' : '';
+      const unique = field.unique ? ' UNIQUE' : '';
 
-      return `\t"${field.name}" ${field.type}${notnull}${pk}`;
+      let privprot = '';
+      if (field.private) privprot = '!!';
+      if (field.protected) privprot = '!';
+
+      let mutable = '';
+      if (field.mutable) mutable = '*';
+
+      return `\t"${privprot}${field.name}${mutable}" ${field.type}${notnull}${pk}${unique}`;
     }).join(',\n');
 
-    return `CREATE TABLE ${name} (\n${fieldString}\n) STRICT;`;
+    return `CREATE TABLE "${name}" (\n${fieldString}\n) STRICT;`;
   }
 
   getData(data) {
@@ -155,9 +167,7 @@ export default class Transpiler {
       },
     });
 
-    const parentTable = await this.sql.selectObjects(`
-        PRAGMA TABLE_INFO('xpl_type_${parentId}');
-    `);
+    const parentTable = await this.getTableDetails(`xpl_type_${parentId}`);
 
     const childTable = this.batch2table(batch);
 
@@ -169,5 +179,49 @@ export default class Transpiler {
 
     // TODO: Figure out how to do private, protected, and (maybe) default value?
     return rowId;
+  }
+
+  async getTableDetails(table) {
+    await this.sql.exec({ sql: 'SAVEPOINT getTableDetails;' });
+
+    const tableDetails = await this.sql.selectObjects(`
+      PRAGMA TABLE_XINFO("${table}");
+    `);
+
+    tableDetails.forEach((column, i) => {
+      tableDetails[i].unique = 0;
+    });
+
+    const tableIndexList = await this.sql.selectObjects(`
+      PRAGMA INDEX_LIST("${table}");
+    `);
+
+    await tableIndexList.forEach(async (column) => {
+      const tableIndexInfo = await this.sql.selectObjects(`
+        PRAGMA INDEX_INFO("${column.name}");
+      `);
+
+      tableDetails.forEach((tdColumn, i) => {
+        if (tdColumn.cid === tableIndexInfo[0].cid) {
+          tableDetails[i].unique = column.unique;
+        }
+      });
+    });
+
+    await this.sql.exec({ sql: 'RELEASE getTableDetails;' });
+
+    const flags = /^(?<priv>!)?(?<prot>!)?(?<name>[^!*]+)(?<mutable>[*])?$/;
+    tableDetails.forEach((column, i) => {
+      const { groups } = column.name.match(flags);
+      tableDetails[i].mutable = groups.mutable ? 1 : 0;
+      tableDetails[i].priv = groups.priv ? 1 : 0;
+      tableDetails[i].prot = groups.prot ? 1 : 0;
+
+      tableDetails[i].name = groups.name;
+    });
+
+    console.table(tableDetails);
+
+    return tableDetails;
   }
 }
