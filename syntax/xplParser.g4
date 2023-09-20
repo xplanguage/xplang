@@ -14,26 +14,32 @@ piped: Pipe alias? formulaicPiped;
 alias: Name Assign;
 
 formulaic
-	: (parentCall? formulaCall)
-	| (parentCall? field)
-	| exceptional
+	: field
 	| table
 	| string
 	| number
 	| context
 	| placeholder
-	| null;
+	| null
+	| formulaCall
+	| exceptional;
 
-formulaCall: formulaName formulaCallItem* ParenClose;
+formulaCall: parentCall? formulaName formulaCallItem* ParenClose;
 formulaName: (field ParenOpen | FormulaChar+);
 formulaCallItem: (name Assign)? formulaic;
 parentCall: ParentCall;
 context: Context;
 placeholder: Placeholder;
 
-exceptional: formulaName matcher (BraceOpen caught? BraceClose) formulaCallItem* ParenClose;
-caught: formulaic;
-matcher: ((formulaic | pattern) Assign) | path;
+caught: BraceOpen formulaic BraceClose;
+matcher: ((field | string | number | formulaCall | pattern | null | placeholder | context) Assign) | path;
+
+exceptional: matcher ParenOpen (split | throw | pitch | watch) ParenClose;
+
+throw: BraceClose caught? formulaCallItem* BraceOpen;
+pitch: ParenOpen caught? formulaCallItem* ParenClose;
+split: ParenOpen caught? formulaCallItem* ParenClose ParenClose;
+watch: TableOpen caught? formulaCallItem* TableClose;
 
 table: (batch tableData) | batch | tableData;
 tableData: tableRow+;
@@ -41,7 +47,7 @@ tableRow: TableOpen tableField* TableClose;
 tableField: formulaic;
 
 patchDef: matcher patchParent? (batch hatch | batch | hatch);
-patchParent: BraceOpen formulaic BraceClose;
+patchParent: BraceOpen field BraceClose;
 
 batch: ParenOpen  batchItem* ParenClose;
 batchItem: type? prot? priv? batchName nullable? mutable? unique?
@@ -58,7 +64,7 @@ null: Null;
 hatch: CurlyOpen formulaicPiped* CurlyClose;
 
 type: typeFormulaic | null | typeString | typeBoolean | typeTable |
-	(TypeCustom typeName) (ParenOpen formulaCallItem+ ParenClose)?;
+	(TypeCustom typeName) (ParenOpen caught? formulaCallItem* ParenClose)?;
 typeTable: TypeTable;
 typeBoolean: TypeBoolean;
 typeString: TypeString;
